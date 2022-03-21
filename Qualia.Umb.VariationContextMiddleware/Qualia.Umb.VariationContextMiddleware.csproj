@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		
+        <ContentTargetFolders>.</ContentTargetFolders>
+        <Product>Qualia.Umb.VariationContextMiddleware</Product>
+        <PackageId>Qualia.Umb.VariationContextMiddleware</PackageId>
+        <Title>Qualia.Umb.VariationContextMiddleware</Title>
+		<Description>
+			An umbraco cms package featuring a middleware for setting the culture, ui culture and variation context, through the use of a query param, header, or cookie.
+		</Description>
+		<PackageProjectUrl>https://github.com/PagonisTasos/Qualia.Umb.VariationContextMiddleware</PackageProjectUrl>
+        <PackageTags>umbraco plugin package; culture info middleware</PackageTags>
+        <RootNamespace>Qualia.Umb.VariationContextMiddleware</RootNamespace>
+		<Version>1.0.0</Version>
+		<Authors>Pagonis Tasos</Authors>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.1.2" />
+        <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.1.2" />
+    </ItemGroup>
+</Project>
