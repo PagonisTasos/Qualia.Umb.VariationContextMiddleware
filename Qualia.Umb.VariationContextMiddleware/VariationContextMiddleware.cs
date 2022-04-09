@@ -9,7 +9,7 @@ using Umbraco.Cms.Core.Services;
 namespace Qualia.Umb.VariationContextMiddleware
 {
 
-    public class VariationContextMiddleware
+    internal class VariationContextMiddleware
     {
         private readonly RequestDelegate _next;
 
@@ -20,26 +20,29 @@ namespace Qualia.Umb.VariationContextMiddleware
 
         public async Task InvokeAsync(HttpContext context, IVariationContextAccessor variationContextAccessor, ILocalizationService localizationService)
         {
-            var localeStr =
-                GetLocale_fromQuery(context).NullIfEmpty()
-                ?? GetLocale_fromCookie(context).NullIfEmpty()
-                ?? GetLocale_fromHeaders(context).NullIfEmpty()
-                ;
-
-            if (!LocaleExistsInCms(localizationService, localeStr))
+            if (context.Request.IsAjaxRequest())
             {
-                localeStr = localizationService.GetDefaultLanguageIsoCode();
-            }
+                var localeStr =
+                    GetLocale_fromQuery(context).NullIfEmpty()
+                    ?? GetLocale_fromCookie(context).NullIfEmpty()
+                    ?? GetLocale_fromHeaders(context).NullIfEmpty()
+                    ;
+            
+                if (!LocaleExistsInCms(localizationService, localeStr))
+                {
+                    localeStr = localizationService.GetDefaultLanguageIsoCode();
+                }
 
-            if (!string.IsNullOrWhiteSpace(localeStr))
-            {
-                var culture = new CultureInfo(localeStr);
+                if (!string.IsNullOrWhiteSpace(localeStr))
+                {
+                    var culture = new CultureInfo(localeStr);
 
-                //for dictionary
-                CultureInfo.CurrentCulture = culture;
-                CultureInfo.CurrentUICulture = culture;
-                //for content
-                variationContextAccessor.VariationContext = new VariationContext(localeStr);
+                    //for dictionary
+                    CultureInfo.CurrentCulture = culture;
+                    CultureInfo.CurrentUICulture = culture;
+                    //for content
+                    variationContextAccessor.VariationContext = new VariationContext(localeStr);
+                }
             }
 
             await _next(context);
